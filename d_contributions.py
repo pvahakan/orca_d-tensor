@@ -31,20 +31,42 @@ def find_active_space(f):
     else:
         print("Problems with finding active space")
     
-def find_ssc(f):
-    match = "(SPIN-SPIN COUPLING CONTRIBUTION)"
+def find_ssc(f, cont):
+
+    n_lines = 21 # lines after match
+
+    if cont == "ss":
+        match = "(SPIN-SPIN COUPLING CONTRIBUTION)"
+        n_lines = 25
+    elif cont == "2nd so":
+        match = "(2ND ORDER SPIN-ORBIT COUPLING CONTRIBUTION)"
+        n_lines = 36
+    elif cont == "effham so":
+        match = "(EFFECTIVE HAMILTONIAN SPIN-ORBIT COUPLING CONTRIBUTION)"
+    elif cont == "ss and 2nd so":
+        match = "(SPIN-SPIN AND 2ND ORDER SPIN-ORBIT COUPLING CONTRIBUTIONS)"
+    elif cont == "ss and effham so":
+        match = "(SPIN-SPIN AND EFFECTIVE HAMILTONIAN SPIN-ORBIT COUPLING CONTRIBUTION)"
+    else:
+        match = "Contribution not found"
+        data = []
+
     for line in f:
         if line.startswith(match):
-            data = itertools.islice(f, 25)
+            data = itertools.islice(f, n_lines)
             break
 
+    # Print result
     print(match)
     for d in data:
         if str(d) != "\n":
             try:
                 float(d.split()[0])
                 raw_data_array = [float(i) for i in d.split()]
-                print(raw_data_array[0],raw_data_array[1],raw_data_array[2])
+                print("{0:.6f}".format(raw_data_array[0]),
+                      "{0:.6f}".format(raw_data_array[1]),
+                      "{0:.6f}".format(raw_data_array[2])
+                       ) 
                 
             except ValueError:
                 print(d.strip("\n"))
@@ -57,5 +79,14 @@ def find_ssc(f):
 if __name__ == "__main__":
     with open(output) as f:
         # find_active_space(f)
-        find_ssc(f)
-
+        print()
+        find_ssc(f, "ss")
+        print()
+        find_ssc(f, "2nd so")
+        print()
+        find_ssc(f, "effham so")
+        print()
+        find_ssc(f, "ss and 2nd so")
+        print()
+        find_ssc(f, "ss and effham so")
+        print()
