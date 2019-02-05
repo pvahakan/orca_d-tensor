@@ -1,12 +1,4 @@
 Skripti, jolla voi kerätä Orcan .out tiedostosta
-D-tensorin eri kontribuutioita.
+g- ja D-tensorin eri kontribuutiot.
 
-Toimii versiolla 4.0.1 ja toistaiseksi on mahdollista löytää:
-- Käytetty aktiiviavaruus
-- Spin-spin
-
-Toteuttamista kaipaa:
-- 2nd order SOC
-- Effective Hamiltonian SOC
-- SS and 2nd order SO
-- SS and Effective Hamiltonian SO
+Toimii versiolla 4.0.1.
