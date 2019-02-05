@@ -33,10 +33,12 @@ def find_active_space(path):
         print("Problems with finding active space")
     
 
-def print_data(data):
+def print_data(match, data):
     """
     Prints found data.
     """
+    print()
+    print(match)
     for d in data:
         if str(d) != "\n":
             try:
@@ -83,23 +85,23 @@ def find_D(cont, path):
                 data = itertools.islice(f, n_lines)
                 break
 
-        # Print result
-        print(match)
-        print_data(data)
+        print_data(match, data)
 
 
 def find_g(cont, path):
     """
     Finds g-tensor components from orca .out file
+
+    :param f: opened file .out
+    :param cont: contribution to search
     """
 
-    n_lines = 17
+    n_lines = 17 # Number of lines after match
 
-    # Orca spin orbit calculation
     if cont == "soc":
         print("\n------------------------------------")
         print("ORCA SPIN-ORBIT COUPLING CALCULATION")
-        print("------------------------------------\n")
+        print("------------------------------------")
         match = "ELECTRONIC G-MATRIX"
     elif cont == "s-cont":
         match = "ELECTRONIC G-MATRIX: S contribution"
@@ -110,20 +112,19 @@ def find_g(cont, path):
     elif cont == "sos":
         print("\n---------------------------")
         print("SUM OVER STATES CALCULATION")
-        print("---------------------------\n")
+        print("---------------------------")
         match = "ELECTRONIC G-MATRIX"
     else:
         data = []
 
-    print(match)
-
+    # Read wanted data to memory
     with open(path) as f:
         for line in f:
             if line.startswith(match):
                 data = itertools.islice(f, n_lines)
                 break
 
-        print_data(data)
+        print_data(match, data)
 
 
 
@@ -131,28 +132,20 @@ def find_g(cont, path):
 #          MAIN
 # ------------------------
 if __name__ == "__main__":
-    print()
-    find_g("soc", output)
-    print()
-    find_g("l-cont", output)
-    print()
-    find_g("s-cont", output)
-    print()
-    find_g("effham", output)
-    print()
-    find_g("sos", output)
-    print()
+    # Active space
     find_active_space(output)
-    print()
-    find_D("ss", output)
-    print()
-    find_D("ss", output)
-    print()
-    find_D("2nd so", output)
-    print()
-    find_D("effham so", output)
-    print()
-    find_D("ss and 2nd so", output)
-    print()
-    find_D("ss and effham so", output)
-    print()
+
+    # g-tensor
+    find_g("soc", output)
+    find_g("l-cont", output)
+    find_g("s-cont", output)
+    find_g("effham", output)
+    find_g("sos", output)
+
+    # D-tensor
+    # find_D("ss", output)
+    # find_D("ss", output)
+    # find_D("2nd so", output)
+    # find_D("effham so", output)
+    # find_D("ss and 2nd so", output)
+    # find_D("ss and effham so", output)
